@@ -97,13 +97,33 @@ export class EmployeesController {
     description: 'Number of items per page',
     type: Number,
   })
+  @ApiQuery({
+    name: 'sortBy',
+    required: false,
+    description: 'Field to sort by',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'sortOrder',
+    required: false,
+    description: 'Sort order (asc or desc)',
+    type: String,
+  })
   async findAll(
     @Query('type') type?: string,
     @Query('page') page = 1,
     @Query('limit') limit = 5,
+    @Query('sortBy') sortBy?: string,
+    @Query('sortOrder') sortOrder: 'asc' | 'desc' = 'asc',
   ) {
     try {
-      const employees = await this.employeesService.findAll(type, page, limit);
+      const employees = await this.employeesService.findAll(
+        type,
+        page,
+        limit,
+        sortBy,
+        sortOrder,
+      );
       return employees;
     } catch (error) {
       throw new HttpException(

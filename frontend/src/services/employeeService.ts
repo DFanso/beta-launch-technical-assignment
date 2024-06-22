@@ -3,10 +3,16 @@ import { Employee } from '../types';
 
 const API_URL = 'http://localhost:5000/v1/employees';
 
-export const getEmployees = async (type?: string, page: number = 1, limit: number = 5) => {
+export const getEmployees = async (
+  type?: string,
+  page: number = 1,
+  limit: number = 5,
+  sortBy?: string,
+  sortOrder: 'asc' | 'desc' = 'asc'
+) => {
   try {
     const response = await axios.get(API_URL, {
-      params: { type, page, limit }
+      params: { type, page, limit, sortBy, sortOrder }
     });
     if (response.status === 200) {
       return response.data;

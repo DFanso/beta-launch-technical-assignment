@@ -16,10 +16,21 @@ export class EmployeesService {
     return createdEmployee;
   }
 
-  async findAll(type?: string, page = 1, limit = 5): Promise<Employee[]> {
+  async findAll(
+    type?: string,
+    page = 1,
+    limit = 5,
+    sortBy?: string,
+    sortOrder: 'asc' | 'desc' = 'asc',
+  ): Promise<Employee[]> {
     const filter = type ? { employeeType: type } : {};
+    const sort: { [key: string]: 'asc' | 'desc' } = sortBy
+      ? { [sortBy]: sortOrder }
+      : {};
+
     return this.employeeModel
       .find(filter)
+      .sort(sort)
       .skip((page - 1) * limit)
       .limit(limit)
       .exec();

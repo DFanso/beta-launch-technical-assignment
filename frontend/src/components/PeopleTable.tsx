@@ -25,15 +25,18 @@ import { Employee } from '../types';
 const PeopleTable = () => {
   const [people, setPeople] = useState<Employee[]>([]);
   const [selectedPerson, setSelectedPerson] = useState<Employee | null>(null);
+  const [employeeType, setEmployeeType] = useState<string | undefined>(undefined);
+  const [sortBy, setSortBy] = useState<string | undefined>(undefined);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     fetchEmployees();
-  }, []);
+  }, [employeeType, sortBy, sortOrder]);
 
   const fetchEmployees = async () => {
     try {
-      const data = await getEmployees();
+      const data = await getEmployees(employeeType, 1, 5, sortBy, sortOrder);
       if ('error' in data) {
         throw new Error(data.error);
       }
@@ -53,9 +56,6 @@ const PeopleTable = () => {
   const handleDelete = async (id: string) => {
     try {
       const response = await deleteEmployee(id);
-      // if ('error' in response) {
-      //   throw new Error(response.error);
-      // }
       fetchEmployees();
       toast.success('Employee deleted successfully');
     } catch (error) {
@@ -87,11 +87,20 @@ const PeopleTable = () => {
     }
   };
 
+  const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setEmployeeType(event.target.value || undefined);
+  };
+
+  const handleSort = (field: string) => {
+    setSortBy(field);
+    setSortOrder(prevOrder => (prevOrder === 'asc' ? 'desc' : 'asc'));
+  };
+
   return (
     <Box p={5}>
       <Heading mb={5}>People</Heading>
       <Flex mb={5} justifyContent="space-between" alignItems="center">
-        <Select placeholder="Employee Types" width="200px">
+        <Select placeholder="Employee Types" width="200px" onChange={handleTypeChange}>
           <option value="Full time">Full Time</option>
           <option value="Part time">Part Time</option>
           <option value="Contract">Contract Basis</option>
@@ -111,6 +120,7 @@ const PeopleTable = () => {
                     size="xs"
                     variant="ghost"
                     ml={1}
+                    onClick={() => handleSort('displayName')}
                   />
                   <IconButton
                     aria-label="Sort Display Name Desc"
@@ -118,6 +128,7 @@ const PeopleTable = () => {
                     size="xs"
                     variant="ghost"
                     ml={1}
+                    onClick={() => handleSort('displayName')}
                   />
                 </Flex>
               </Th>
@@ -130,6 +141,7 @@ const PeopleTable = () => {
                     size="xs"
                     variant="ghost"
                     ml={1}
+                    onClick={() => handleSort('employeeId')}
                   />
                   <IconButton
                     aria-label="Sort Emp ID Desc"
@@ -137,6 +149,7 @@ const PeopleTable = () => {
                     size="xs"
                     variant="ghost"
                     ml={1}
+                    onClick={() => handleSort('employeeId')}
                   />
                 </Flex>
               </Th>
