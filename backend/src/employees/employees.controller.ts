@@ -15,7 +15,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { Employee } from './schemas/employee.schema';
 
 @ApiTags('employees')
-@Controller('employees')
+@Controller({ path: 'employees', version: '1' })
 export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}
 

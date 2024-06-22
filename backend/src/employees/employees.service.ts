@@ -12,8 +12,8 @@ export class EmployeesService {
   ) {}
 
   async create(createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
-    const createdEmployee = new this.employeeModel(createEmployeeDto);
-    return createdEmployee.save();
+    const createdEmployee = await this.employeeModel.create(createEmployeeDto);
+    return createdEmployee;
   }
 
   async findAll(type?: string, page = 1, limit = 5): Promise<Employee[]> {
