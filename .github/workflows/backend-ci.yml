@@ -13,8 +13,9 @@ on:
       - 'backend/**'
 
 jobs:
-  CI:
+  Backend-CI:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -27,9 +28,24 @@ jobs:
       - name: Install dependencies
         run: |
           cd backend
-          yarn ci
+          yarn install
+
+      - name: Lint code
+        run: |
+          cd backend
+          yarn lint
+
+      - name: Build project
+        run: |
+          cd backend
+          yarn build
 
       - name: Run tests
         run: |
-          cd API
+          cd backend
           yarn test
+
+      - name: Check for outdated dependencies
+        run: |
+          cd backend
+          yarn outdated
