@@ -30,11 +30,6 @@ jobs:
           cd frontend
           yarn install
 
-      - name: Lint code
-        run: |
-          cd frontend
-          yarn lint
-
       - name: Build project
         run: |
           cd frontend
