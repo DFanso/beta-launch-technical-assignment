@@ -1,0 +1,35 @@
+name: Backend CI
+
+on:
+  pull_request:
+    branches:
+      - dev 
+    paths:
+      - 'backend/**'
+  push:
+    branches:
+      - dev
+    paths:
+      - 'backend/**'
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          yarn ci
+
+      - name: Run tests
+        run: |
+          cd API
+          yarn test
