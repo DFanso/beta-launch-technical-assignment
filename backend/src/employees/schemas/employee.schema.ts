@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 import * as AutoIncrementFactory from 'mongoose-sequence';
 import { EmployeeType } from '../../Types/employee.types';
 
-export type EmployeeDocument = Employee & Document;
+export type EmployeeDocument = Employee & mongoose.Document;
 
 const AutoIncrement = AutoIncrementFactory(mongoose);
 
@@ -24,10 +24,10 @@ export class Employee {
   @Prop({ required: true })
   dateOfBirth: Date;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true, match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, match: /^\d{10}$/ })
   mobileNumber: string;
 
   @Prop({ unique: true })

@@ -50,6 +50,16 @@ const formatDateString = (dateString: string) => {
   return `${year}-${month}-${day}`;
 };
 
+const validateEmail = (email: string) => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+};
+
+const validatePhoneNumber = (phone: string) => {
+  const re = /^\d{10}$/; // Simple validation for 10 digit phone number
+  return re.test(phone);
+};
+
 const AddEditPeopleModal: React.FC<AddEditPeopleModalProps> = ({ isOpen, onClose, initialData, onSave }) => {
   const [formData, setFormData] = useState<Employee>(initialData || defaultEmployee);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -83,8 +93,16 @@ const AddEditPeopleModal: React.FC<AddEditPeopleModalProps> = ({ isOpen, onClose
     if (!formData.displayName) newErrors.displayName = 'Preferred / Display Name is required';
     if (!formData.gender) newErrors.gender = 'Gender is required';
     if (!formData.dateOfBirth) newErrors.dateOfBirth = 'Date of Birth is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    if (!formData.mobileNumber) newErrors.mobileNumber = 'Mobile Number is required';
+    if (!formData.email) {
+      newErrors.email = 'Email is required';
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = 'Invalid email format';
+    }
+    if (!formData.mobileNumber) {
+      newErrors.mobileNumber = 'Mobile Number is required';
+    } else if (!validatePhoneNumber(formData.mobileNumber)) {
+      newErrors.mobileNumber = 'Invalid phone number format';
+    }
     if (!formData.designation) newErrors.designation = 'Designation is required';
     if (!formData.employeeType) newErrors.employeeType = 'Employee Type is required';
     if (!formData.joinedDate) newErrors.joinedDate = 'Joined Date is required';
@@ -97,7 +115,7 @@ const AddEditPeopleModal: React.FC<AddEditPeopleModalProps> = ({ isOpen, onClose
 
   const handleSubmit = () => {
     if (!validate()) return;
-    const { _id, __v, ...cleanData } = formData;
+    const { _id, __v, ...cleanData } = formData;  // Exclude _id and __v
     onSave(cleanData as Employee);
   };
 
