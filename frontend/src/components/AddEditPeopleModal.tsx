@@ -15,7 +15,8 @@ import {
   Textarea,
   Grid,
   GridItem,
-  FormErrorMessage
+  FormErrorMessage,
+  Divider
 } from '@chakra-ui/react';
 import { Employee } from '../types';
 
@@ -115,42 +116,43 @@ const AddEditPeopleModal: React.FC<AddEditPeopleModalProps> = ({ isOpen, onClose
 
   const handleSubmit = () => {
     if (!validate()) return;
-    const { _id, __v, ...cleanData } = formData;  // Exclude _id and __v
+    const { _id, __v, ...cleanData } = formData; 
     onSave(cleanData as Employee);
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="xl">
+    <Modal isOpen={isOpen} onClose={onClose} size="4xl">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{initialData ? 'Edit People' : 'Add People'}</ModalHeader>
+        <Divider mb={2} borderWidth="1.5px"/>
         <ModalCloseButton />
         <ModalBody>
-          <Grid templateColumns="repeat(2, 1fr)" gap={4}>
-            <GridItem colSpan={2}>
+          <Grid templateColumns="repeat(2, 1fr)" gap={5}>
+            <GridItem colSpan={3}>
               <FormControl id="fullName" isRequired isInvalid={!!errors.fullName}>
-                <FormLabel>Full Name</FormLabel>
+                <FormLabel color="#00318C">Full Name</FormLabel>
                 <Input name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} />
                 <FormErrorMessage>{errors.fullName}</FormErrorMessage>
               </FormControl>
             </GridItem>
             <GridItem>
               <FormControl id="initials" isRequired isInvalid={!!errors.initials}>
-                <FormLabel>Name with Initials</FormLabel>
+                <FormLabel color="#00318C">Name with Initials</FormLabel>
                 <Input name="initials" placeholder="Name with Initials" value={formData.initials} onChange={handleChange} />
                 <FormErrorMessage>{errors.initials}</FormErrorMessage>
               </FormControl>
             </GridItem>
             <GridItem>
               <FormControl id="displayName" isRequired isInvalid={!!errors.displayName}>
-                <FormLabel>Preferred / Display Name</FormLabel>
+                <FormLabel color="#00318C">Preferred / Display Name</FormLabel>
                 <Input name="displayName" placeholder="Preferred / Display Name" value={formData.displayName} onChange={handleChange} />
                 <FormErrorMessage>{errors.displayName}</FormErrorMessage>
               </FormControl>
             </GridItem>
             <GridItem>
               <FormControl id="gender" isRequired isInvalid={!!errors.gender}>
-                <FormLabel>Gender</FormLabel>
+                <FormLabel color="#00318C">Gender</FormLabel>
                 <Select name="gender" placeholder="Select Gender" value={formData.gender} onChange={handleChange}>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
@@ -161,35 +163,35 @@ const AddEditPeopleModal: React.FC<AddEditPeopleModalProps> = ({ isOpen, onClose
             </GridItem>
             <GridItem>
               <FormControl id="dateOfBirth" isRequired isInvalid={!!errors.dateOfBirth}>
-                <FormLabel>Date of Birth</FormLabel>
+                <FormLabel color="#00318C">Date of Birth</FormLabel>
                 <Input name="dateOfBirth" type="date" value={formData.dateOfBirth} onChange={handleChange} />
                 <FormErrorMessage>{errors.dateOfBirth}</FormErrorMessage>
               </FormControl>
             </GridItem>
             <GridItem>
               <FormControl id="email" isRequired isInvalid={!!errors.email}>
-                <FormLabel>Email</FormLabel>
+                <FormLabel color="#00318C">Email</FormLabel>
                 <Input name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
                 <FormErrorMessage>{errors.email}</FormErrorMessage>
               </FormControl>
             </GridItem>
             <GridItem>
               <FormControl id="mobileNumber" isRequired isInvalid={!!errors.mobileNumber}>
-                <FormLabel>Mobile Number</FormLabel>
+                <FormLabel color="#00318C">Mobile Number</FormLabel>
                 <Input name="mobileNumber" placeholder="Mobile Number" value={formData.mobileNumber} onChange={handleChange} />
                 <FormErrorMessage>{errors.mobileNumber}</FormErrorMessage>
               </FormControl>
             </GridItem>
             <GridItem>
               <FormControl id="designation" isRequired isInvalid={!!errors.designation}>
-                <FormLabel>Designation</FormLabel>
+                <FormLabel color="#00318C">Designation</FormLabel>
                 <Input name="designation" placeholder="Designation" value={formData.designation} onChange={handleChange} />
                 <FormErrorMessage>{errors.designation}</FormErrorMessage>
               </FormControl>
             </GridItem>
             <GridItem>
               <FormControl id="employeeType" isRequired isInvalid={!!errors.employeeType}>
-                <FormLabel>Employee Type</FormLabel>
+                <FormLabel color="#00318C">Employee Type</FormLabel>
                 <Select name="employeeType" placeholder="Select Employee Type" value={formData.employeeType} onChange={handleChange}>
                   <option value="Full time">Full Time</option>
                   <option value="Part time">Part Time</option>
@@ -200,28 +202,28 @@ const AddEditPeopleModal: React.FC<AddEditPeopleModalProps> = ({ isOpen, onClose
             </GridItem>
             <GridItem>
               <FormControl id="joinedDate" isRequired isInvalid={!!errors.joinedDate}>
-                <FormLabel>Joined Date</FormLabel>
+                <FormLabel color="#00318C">Joined Date</FormLabel>
                 <Input name="joinedDate" type="date" value={formData.joinedDate} onChange={handleChange} />
                 <FormErrorMessage>{errors.joinedDate}</FormErrorMessage>
               </FormControl>
             </GridItem>
             <GridItem>
               <FormControl id="experience" isRequired isInvalid={!!errors.experience}>
-                <FormLabel>Experience</FormLabel>
+                <FormLabel color="#00318C">Experience</FormLabel>
                 <Input name="experience" type="number" placeholder="Experience" value={formData.experience} onChange={handleChange} />
                 <FormErrorMessage>{errors.experience}</FormErrorMessage>
               </FormControl>
             </GridItem>
             <GridItem colSpan={2}>
               <FormControl id="salary" isRequired isInvalid={!!errors.salary}>
-                <FormLabel>Salary</FormLabel>
+                <FormLabel color="#00318C">Salary</FormLabel>
                 <Input name="salary" type="number" placeholder="Salary" value={formData.salary} onChange={handleChange} />
                 <FormErrorMessage>{errors.salary}</FormErrorMessage>
               </FormControl>
             </GridItem>
             <GridItem colSpan={2}>
               <FormControl id="personalNotes" isInvalid={!!errors.personalNotes}>
-                <FormLabel>Personal Notes</FormLabel>
+                <FormLabel color="#00318C">Personal Notes</FormLabel>
                 <Textarea name="personalNotes" placeholder="Personal Notes" value={formData.personalNotes} onChange={handleChange} />
                 <FormErrorMessage>{errors.personalNotes}</FormErrorMessage>
               </FormControl>
@@ -229,10 +231,10 @@ const AddEditPeopleModal: React.FC<AddEditPeopleModalProps> = ({ isOpen, onClose
           </Grid>
         </ModalBody>
         <ModalFooter>
-          <Button variant="ghost" mr={3} onClick={onClose}>
+          <Button color="#00318C" backgroundColor="white" mr={3} onClick={onClose}>
             Cancel
           </Button>
-          <Button colorScheme="blue" onClick={handleSubmit}>{initialData ? 'Save Changes' : 'Add People'}</Button>
+          <Button color="white" backgroundColor="#00318C" onClick={handleSubmit}>{initialData ? 'Save Changes' : 'Add People'}</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

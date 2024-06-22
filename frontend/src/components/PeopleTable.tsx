@@ -17,6 +17,7 @@ import {
   HStack,
   Text,
   Spinner,
+  Divider,
 } from '@chakra-ui/react';
 import { ChevronUpIcon, ChevronDownIcon, ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
 import { ToastContainer, toast } from 'react-toastify';
@@ -49,8 +50,8 @@ const PeopleTable = () => {
       if ('error' in data) {
         throw new Error(data.error);
       }
-      setPeople(data.employees || []); // Ensure `employees` is an array
-      setTotalPages(data.totalPages || 1); // Ensure `totalPages` is a number
+      setPeople(data.employees || []);
+      setTotalPages(data.totalPages || 1);
     } catch (error) {
       console.error('Error fetching employees:', error);
       setError('Error fetching employees');
@@ -116,13 +117,14 @@ const PeopleTable = () => {
   return (
     <Box p={5}>
       <Heading mb={5}>People</Heading>
-      <Flex mb={5} justifyContent="space-between" alignItems="center">
-        <Select placeholder="Employee Types" width="200px" onChange={handleTypeChange}>
+      <Divider mb={2} borderWidth="1.5px"/>
+      <Flex mb={5} justifyContent="Right" alignItems="center" marginRight='10px'>
+        <Select placeholder="Employee Types" width="200px" marginRight='10px' onChange={handleTypeChange}>
           <option value="Full time">Full Time</option>
           <option value="Part time">Part Time</option>
           <option value="Contract">Contract Basis</option>
         </Select>
-        <Button colorScheme="blue" onClick={() => { setSelectedPerson(null); onOpen(); }}>Add People</Button>
+        <Button color="white" backgroundColor="#00318C" onClick={() => { setSelectedPerson(null); onOpen(); }}>Add People</Button>
       </Flex>
       {loading ? (
         <Flex justifyContent="center" alignItems="center" height="200px">
@@ -131,11 +133,11 @@ const PeopleTable = () => {
       ) : error ? (
         <Text color="red.500">{error}</Text>
       ) : (
-        <TableContainer>
-          <Table variant="striped" colorScheme="gray">
-            <Thead>
+        <TableContainer mx="auto" width="80%">
+          <Table variant="" colorScheme="gray">
+            <Thead backgroundColor="gray.100">
               <Tr>
-                <Th>
+                <Th border="1px solid" borderColor="gray.200">
                   <Flex alignItems="center">
                     Display Name
                     <IconButton
@@ -156,7 +158,7 @@ const PeopleTable = () => {
                     />
                   </Flex>
                 </Th>
-                <Th>
+                <Th border="1px solid" borderColor="gray.200">
                   <Flex alignItems="center">
                     Emp ID
                     <IconButton
@@ -177,30 +179,30 @@ const PeopleTable = () => {
                     />
                   </Flex>
                 </Th>
-                <Th>Designation</Th>
-                <Th>Emp. Type</Th>
-                <Th>Experience</Th>
-                <Th>Actions</Th>
+                <Th border="1px solid" borderColor="gray.200">Designation</Th>
+                <Th border="1px solid" borderColor="gray.200">Emp. Type</Th>
+                <Th border="1px solid" borderColor="gray.200">Experience</Th>
+                <Th border="1px solid" borderColor="gray.200">Actions</Th>
               </Tr>
             </Thead>
             <Tbody>
               {people.length > 0 ? (
                 people.map((person) => (
                   <Tr key={person.employeeId}>
-                    <Td>{person.displayName}</Td>
-                    <Td>{person.employeeId}</Td>
-                    <Td>{person.designation}</Td>
-                    <Td>{person.employeeType}</Td>
-                    <Td>{person.experience}</Td>
-                    <Td>
-                      <Button colorScheme="blue" size="sm" onClick={() => handleEdit(person)}>Edit</Button>
-                      <Button colorScheme="red" size="sm" ml={2} onClick={() => handleDelete(person.employeeId as any)}>Delete</Button>
+                    <Td border="1px solid" borderColor="gray.200">{person.displayName}</Td>
+                    <Td border="1px solid" borderColor="gray.200">{person.employeeId}</Td>
+                    <Td border="1px solid" borderColor="gray.200">{person.designation}</Td>
+                    <Td border="1px solid" borderColor="gray.200">{person.employeeType}</Td>
+                    <Td border="1px solid" borderColor="gray.200">{person.experience} Years</Td>
+                    <Td border="1px solid" borderColor="gray.200">
+                      <Button variant="link" colorScheme="blue" size="sm" onClick={() => handleEdit(person)}>Edit</Button>
+                      <Button variant="link" colorScheme="red" size="sm" ml={2} onClick={() => handleDelete(person.employeeId as any)}>Delete</Button>
                     </Td>
                   </Tr>
                 ))
               ) : (
                 <Tr>
-                  <Td colSpan={6} textAlign="center">
+                  <Td colSpan={6} textAlign="center" border="1px solid" borderColor="gray.200">
                     No employees found.
                   </Td>
                 </Tr>

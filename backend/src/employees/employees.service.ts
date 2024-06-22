@@ -43,9 +43,6 @@ export class EmployeesService {
 
   async findOne(filter: any): Promise<Employee> {
     const employee = await this.employeeModel.findOne(filter).exec();
-    if (!employee) {
-      throw new NotFoundException(`Employee not found`);
-    }
     return employee;
   }
 

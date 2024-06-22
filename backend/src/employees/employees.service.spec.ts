@@ -110,15 +110,6 @@ describe('EmployeesService', () => {
       } as any);
       expect(await service.findOne({ employeeId: 1 })).toEqual(employee);
     });
-
-    it('should throw an error if employee not found', async () => {
-      jest.spyOn(model, 'findOne').mockReturnValue({
-        exec: jest.fn().mockResolvedValueOnce(null),
-      } as any);
-      await expect(service.findOne({ employeeId: 2 })).rejects.toThrow(
-        NotFoundException,
-      );
-    });
   });
 
   describe('update', () => {
