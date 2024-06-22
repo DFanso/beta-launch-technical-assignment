@@ -23,10 +23,14 @@ const mockEmployee = (
 
 const mockEmployeeModel = {
   create: jest.fn(),
-  find: jest.fn(),
-  findOne: jest.fn(),
-  findOneAndUpdate: jest.fn(),
-  deleteOne: jest.fn(),
+  find: jest.fn().mockReturnThis(),
+  findOne: jest.fn().mockReturnThis(),
+  findOneAndUpdate: jest.fn().mockReturnThis(),
+  deleteOne: jest.fn().mockReturnThis(),
+  countDocuments: jest.fn(),
+  sort: jest.fn().mockReturnThis(),
+  skip: jest.fn().mockReturnThis(),
+  limit: jest.fn().mockReturnThis(),
   exec: jest.fn(),
 };
 
@@ -86,11 +90,15 @@ describe('EmployeesService', () => {
     it('should return an array of employees', async () => {
       const employees = [mockEmployee()];
       jest.spyOn(model, 'find').mockReturnValue({
+        sort: jest.fn().mockReturnThis(),
         skip: jest.fn().mockReturnThis(),
         limit: jest.fn().mockReturnThis(),
         exec: jest.fn().mockResolvedValueOnce(employees),
       } as any);
-      expect(await service.findAll()).toEqual(employees);
+      jest.spyOn(model, 'countDocuments').mockResolvedValueOnce(1);
+      const result = await service.findAll();
+      expect(result.employees).toEqual(employees);
+      expect(result.totalPages).toBe(1);
     });
   });
 

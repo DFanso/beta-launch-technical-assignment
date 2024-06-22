@@ -125,7 +125,9 @@ const PeopleTable = () => {
         <Button colorScheme="blue" onClick={() => { setSelectedPerson(null); onOpen(); }}>Add People</Button>
       </Flex>
       {loading ? (
-        <Spinner />
+        <Flex justifyContent="center" alignItems="center" height="200px">
+          <Spinner size="xl" />
+        </Flex>
       ) : error ? (
         <Text color="red.500">{error}</Text>
       ) : (
