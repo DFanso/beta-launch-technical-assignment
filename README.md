@@ -11,6 +11,9 @@ Welcome to the Employment Management System (EMS). This system is designed to ma
 - ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white) MongoDB: A NoSQL database used to store employee information.
 - ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=swagger&logoColor=black) Swagger: Used for API documentation and testing.
 - ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white) TypeScript: For type safety and enhanced development experience.
+- ![Jest](https://img.shields.io/badge/Jest-C21325?style=flat&logo=jest&logoColor=white) Jest: Used for unit testing.
+- ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat&logo=github-actions&logoColor=white) GitHub Actions: Used for CI/CD workflows.
+- ![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=flat&logo=eslint&logoColor=white) ESLint: Used for linting the codebase.
 
 ### Frontend
 - ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white) Vite: A build tool that aims to provide a faster and leaner development experience.
@@ -18,6 +21,7 @@ Welcome to the Employment Management System (EMS). This system is designed to ma
 - ![Chakra UI](https://img.shields.io/badge/Chakra--UI-319795?style=flat&logo=chakra-ui&logoColor=white) Chakra UI: A simple, modular, and accessible component library.
 - ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white) Tailwind CSS: A utility-first CSS framework for rapid UI development.
 - ![Axios](https://img.shields.io/badge/Axios-5A29E4?style=flat&logo=axios&logoColor=white) Axios: A promise-based HTTP client for making API requests.
+- ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat&logo=github-actions&logoColor=white) GitHub Actions: Used for CI workflows.
 
 ## Installation and Setup
 
@@ -87,7 +91,6 @@ API documentation is available and accessible through Swagger.
     http://localhost:5000/documentation
     ```
 
-
 ## How to Run
 
 1. **Ensure MongoDB is running**.
@@ -99,3 +102,24 @@ API documentation is available and accessible through Swagger.
     ```bash
     yarn dev
     ```
+
+## Testing and Linting
+
+### Backend
+
+1. **Run unit tests**
+    ```bash
+    yarn test
+    ```
+
+2. **Run linting**
+    ```bash
+    yarn lint
+    ```
+
+### CI with GitHub Actions
+
+This project uses GitHub Actions for continuous integration. The workflows are defined in the `.github/workflows` directory. The following tasks are automated:
+- Running unit tests.
+- Running linting checks.
+
