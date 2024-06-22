@@ -21,7 +21,7 @@ export const getEmployees = async (
     }
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      return { status: error.response?.status || 500, error: error.message };
+      return { status: error.response?.status || 500, error: error.response?.data.message };
     } else {
       return { status: 500, error: 'An unknown error occurred' };
     }
@@ -38,7 +38,7 @@ export const getEmployeeById = async (id: string) => {
     }
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      return { status: error.response?.status || 500, error: error.message };
+      return { status: error.response?.status || 500, error: error.response?.data.message};
     } else {
       return { status: 500, error: 'An unknown error occurred' };
     }
@@ -48,14 +48,15 @@ export const getEmployeeById = async (id: string) => {
 export const createEmployee = async (employeeData: Employee) => {
   try {
     const response = await axios.post(API_URL, employeeData);
+    console.log(response)
     if (response.status === 201) {
       return response.data;
     } else {
-      return { status: response.status, error: 'Failed to create employee' };
+      return { status: response.status, error: response.data};
     }
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      return { status: error.response?.status || 500, error: error.message };
+      return { status: error.response?.status || 500, error: error.response?.data.message};
     } else {
       return { status: 500, error: 'An unknown error occurred' };
     }
@@ -72,7 +73,7 @@ export const updateEmployee = async (employeeId: number, employeeData: Employee)
     }
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      return { status: error.response?.status || 500, error: error.message };
+      return { status: error.response?.status || 500, error: error.response?.data.message };
     } else {
       return { status: 500, error: 'An unknown error occurred' };
     }
@@ -89,7 +90,7 @@ export const deleteEmployee = async (id: string) => {
     }
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      return { status: error.response?.status || 500, error: error.message };
+      return { status: error.response?.status || 500, error: error.response?.data.message };
     } else {
       return { status: 500, error: 'An unknown error occurred' };
     }

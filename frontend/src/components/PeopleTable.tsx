@@ -96,7 +96,7 @@ const PeopleTable = () => {
       onClose();
     } catch (error) {
       console.error('Error saving employee:', error);
-      toast.error(`Error saving employee: ${error}`);
+      toast.error(`${error}`);
     }
   };
 
