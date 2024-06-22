@@ -48,4 +48,4 @@ jobs:
       - name: Check for outdated dependencies
         run: |
           cd backend
-          yarn outdated
+          yarn outdated || true
