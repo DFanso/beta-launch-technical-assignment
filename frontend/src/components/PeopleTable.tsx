@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Table,
   Thead,
@@ -11,12 +11,19 @@ import {
   Box,
   Heading,
   Select,
-  Flex
+  Flex,
+  IconButton,
+  useDisclosure
 } from '@chakra-ui/react';
+import { ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AddEditPeopleModal from './AddEditPeopleModal';
 
 const PeopleTable = () => {
+  const [selectedPerson, setSelectedPerson] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const people = [
     { displayName: "Corey Curtis", empId: "0001", designation: "Senior Developer", empType: "Full Time", experience: "02 Years" },
     { displayName: "Alfonso Stanton", empId: "0002", designation: "Senior Front-End Developer", empType: "Part Time", experience: "03 Years" },
@@ -31,11 +38,13 @@ const PeopleTable = () => {
     { displayName: "Ruben Dokidis", empId: "0011", designation: "Guest Admin", empType: "Part Time", experience: "09 Years" },
   ];
 
-  const handleEdit = (name: string) => {
-    toast.info(`Edit ${name}`);
+  const handleEdit = (person : any) => {
+    setSelectedPerson(person);
+    onOpen();
+    toast.info(`Edit ${person.displayName}`);
   };
 
-  const handleDelete = (name: string) => {
+  const handleDelete = (name : any) => {
     toast.error(`Delete ${name}`);
   };
 
@@ -49,14 +58,50 @@ const PeopleTable = () => {
           <option value="contract">Contract Basis</option>
           <option value="other">Other</option>
         </Select>
-        <Button colorScheme="blue">Add People</Button>
+        <Button colorScheme="blue" onClick={onOpen}>Add People</Button>
       </Flex>
       <TableContainer>
         <Table variant="striped" colorScheme="gray">
           <Thead>
             <Tr>
-              <Th>Display Name</Th>
-              <Th>Emp ID</Th>
+              <Th>
+                <Flex alignItems="center">
+                  Display Name
+                  <IconButton
+                    aria-label="Sort Display Name"
+                    icon={<ChevronUpIcon />}
+                    size="xs"
+                    variant="ghost"
+                    ml={1}
+                  />
+                  <IconButton
+                    aria-label="Sort Display Name Desc"
+                    icon={<ChevronDownIcon />}
+                    size="xs"
+                    variant="ghost"
+                    ml={1}
+                  />
+                </Flex>
+              </Th>
+              <Th>
+                <Flex alignItems="center">
+                  Emp ID
+                  <IconButton
+                    aria-label="Sort Emp ID"
+                    icon={<ChevronUpIcon />}
+                    size="xs"
+                    variant="ghost"
+                    ml={1}
+                  />
+                  <IconButton
+                    aria-label="Sort Emp ID Desc"
+                    icon={<ChevronDownIcon />}
+                    size="xs"
+                    variant="ghost"
+                    ml={1}
+                  />
+                </Flex>
+              </Th>
               <Th>Designation</Th>
               <Th>Emp. Type</Th>
               <Th>Experience</Th>
@@ -72,7 +117,7 @@ const PeopleTable = () => {
                 <Td>{person.empType}</Td>
                 <Td>{person.experience}</Td>
                 <Td>
-                  <Button colorScheme="blue" size="sm" onClick={() => handleEdit(person.displayName)}>Edit</Button>
+                  <Button colorScheme="blue" size="sm" onClick={() => handleEdit(person)}>Edit</Button>
                   <Button colorScheme="red" size="sm" ml={2} onClick={() => handleDelete(person.displayName)}>Delete</Button>
                 </Td>
               </Tr>
@@ -80,6 +125,7 @@ const PeopleTable = () => {
           </Tbody>
         </Table>
       </TableContainer>
+      <AddEditPeopleModal isOpen={isOpen} onClose={onClose} initialData={selectedPerson} />
       <ToastContainer />
     </Box>
   );
