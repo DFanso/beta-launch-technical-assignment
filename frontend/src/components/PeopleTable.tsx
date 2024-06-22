@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Table,
   Thead,
@@ -19,33 +19,59 @@ import { ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AddEditPeopleModal from './AddEditPeopleModal';
+import { getEmployees, createEmployee, updateEmployee, deleteEmployee } from '../services/employeeService';
+import { Employee } from '../types';
 
 const PeopleTable = () => {
-  const [selectedPerson, setSelectedPerson] = useState(null);
+  const [people, setPeople] = useState<Employee[]>([]);
+  const [selectedPerson, setSelectedPerson] = useState<Employee | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const people = [
-    { displayName: "Corey Curtis", empId: "0001", designation: "Senior Developer", empType: "Full Time", experience: "02 Years" },
-    { displayName: "Alfonso Stanton", empId: "0002", designation: "Senior Front-End Developer", empType: "Part Time", experience: "03 Years" },
-    { displayName: "Justin Aminoff", empId: "0003", designation: "Senior Developer", empType: "Contract Basis", experience: "02 Years" },
-    { displayName: "Leo Geidt", empId: "0004", designation: "User Experience Designer", empType: "Other", experience: "01 Year" },
-    { displayName: "Jaydon Workman", empId: "0005", designation: "Senior Developer", empType: "Part Time", experience: "03 Years" },
-    { displayName: "Buben Levin", empId: "0006", designation: "Senior Developer", empType: "Contract Basis", experience: "03 Years" },
-    { displayName: "Omar Passaquindici Arcand", empId: "0007", designation: "Senior Developer", empType: "Full Time", experience: "02 Years" },
-    { displayName: "Phillip Mango", empId: "0008", designation: "Senior Developer", empType: "Contract Basis", experience: "05 Years" },
-    { displayName: "Martin Workman", empId: "0009", designation: "Sales Officer", empType: "Full Time", experience: "02 Years" },
-    { displayName: "Ruben Dokidis", empId: "0010", designation: "Senior Developer", empType: "Full Time", experience: "06 Years" },
-    { displayName: "Ruben Dokidis", empId: "0011", designation: "Guest Admin", empType: "Part Time", experience: "09 Years" },
-  ];
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
 
-  const handleEdit = (person : any) => {
+  const fetchEmployees = async () => {
+    try {
+      const data = await getEmployees();
+      setPeople(data);
+    } catch (error) {
+      console.error('Error fetching employees:', error);
+    }
+  };
+
+  const handleEdit = (person: Employee) => {
     setSelectedPerson(person);
     onOpen();
     toast.info(`Edit ${person.displayName}`);
   };
 
-  const handleDelete = (name : any) => {
-    toast.error(`Delete ${name}`);
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteEmployee(id);
+      fetchEmployees();
+      toast.success('Employee deleted successfully');
+    } catch (error) {
+      console.error('Error deleting employee:', error);
+      toast.error('Error deleting employee');
+    }
+  };
+
+  const handleSave = async (employeeData: Employee) => {
+    try {
+      if (selectedPerson) {
+        await updateEmployee(selectedPerson.employeeId as any, employeeData);
+        toast.success('Employee updated successfully');
+      } else {
+        await createEmployee(employeeData);
+        toast.success('Employee added successfully');
+      }
+      fetchEmployees();
+      onClose();
+    } catch (error) {
+      console.error('Error saving employee:', error);
+      toast.error('Error saving employee');
+    }
   };
 
   return (
@@ -53,12 +79,11 @@ const PeopleTable = () => {
       <Heading mb={5}>People</Heading>
       <Flex mb={5} justifyContent="space-between" alignItems="center">
         <Select placeholder="Employee Types" width="200px">
-          <option value="full-time">Full Time</option>
-          <option value="part-time">Part Time</option>
-          <option value="contract">Contract Basis</option>
-          <option value="other">Other</option>
+          <option value="Full time">Full Time</option>
+          <option value="Part time">Part Time</option>
+          <option value="Contract">Contract Basis</option>
         </Select>
-        <Button colorScheme="blue" onClick={onOpen}>Add People</Button>
+        <Button colorScheme="blue" onClick={() => { setSelectedPerson(null); onOpen(); }}>Add People</Button>
       </Flex>
       <TableContainer>
         <Table variant="striped" colorScheme="gray">
@@ -110,22 +135,27 @@ const PeopleTable = () => {
           </Thead>
           <Tbody>
             {people.map((person) => (
-              <Tr key={person.empId}>
+              <Tr key={person.employeeId}>
                 <Td>{person.displayName}</Td>
-                <Td>{person.empId}</Td>
+                <Td>{person.employeeId}</Td>
                 <Td>{person.designation}</Td>
-                <Td>{person.empType}</Td>
+                <Td>{person.employeeType}</Td>
                 <Td>{person.experience}</Td>
                 <Td>
                   <Button colorScheme="blue" size="sm" onClick={() => handleEdit(person)}>Edit</Button>
-                  <Button colorScheme="red" size="sm" ml={2} onClick={() => handleDelete(person.displayName)}>Delete</Button>
+                  <Button colorScheme="red" size="sm" ml={2} onClick={() => handleDelete(person.employeeId as any)}>Delete</Button>
                 </Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
       </TableContainer>
-      <AddEditPeopleModal isOpen={isOpen} onClose={onClose} initialData={selectedPerson} />
+      <AddEditPeopleModal
+        isOpen={isOpen}
+        onClose={onClose}
+        initialData={selectedPerson}
+        onSave={handleSave}
+      />
       <ToastContainer />
     </Box>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -16,10 +16,54 @@ import {
   Grid,
   GridItem
 } from '@chakra-ui/react';
+import { Employee } from '../types';
 
-const AddEditPeopleModal = ({ isOpen, onClose, initialData }: { isOpen: boolean, onClose: () => void, initialData?: any }) => {
+interface AddEditPeopleModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  initialData: Employee | null;
+  onSave: (data: Employee) => void;
+}
+
+const defaultEmployee: Employee = {
+  fullName: '',
+  initials: '',
+  displayName: '',
+  gender: '',
+  dateOfBirth: '',
+  email: '',
+  mobileNumber: '',
+  designation: '',
+  employeeType: 'Full time',
+  experience: 0,
+  joinedDate: '',
+  salary: 0,
+  personalNotes: ''
+};
+
+const AddEditPeopleModal: React.FC<AddEditPeopleModalProps> = ({ isOpen, onClose, initialData, onSave }) => {
+  const [formData, setFormData] = useState<Employee>(initialData || defaultEmployee);
+
+  useEffect(() => {
+    setFormData(initialData || defaultEmployee);
+  }, [initialData]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    if (name === 'experience' || name === 'salary') {
+      setFormData({ ...formData, [name]: Number(value) });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const handleSubmit = () => {
+    const { _id, __v, ...cleanData } = formData;
+    onSave(cleanData as Employee);
+  };
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="4xl">
+    <Modal isOpen={isOpen} onClose={onClose} size="xl">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{initialData ? 'Edit People' : 'Add People'}</ModalHeader>
@@ -29,99 +73,87 @@ const AddEditPeopleModal = ({ isOpen, onClose, initialData }: { isOpen: boolean,
             <GridItem colSpan={2}>
               <FormControl id="fullName" isRequired>
                 <FormLabel>Full Name</FormLabel>
-                <Input placeholder="Full Name" defaultValue={initialData?.fullName} />
+                <Input name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} />
               </FormControl>
             </GridItem>
             <GridItem>
               <FormControl id="initials" isRequired>
                 <FormLabel>Name with Initials</FormLabel>
-                <Input placeholder="Name with Initials" defaultValue={initialData?.initials} />
+                <Input name="initials" placeholder="Name with Initials" value={formData.initials} onChange={handleChange} />
               </FormControl>
             </GridItem>
             <GridItem>
-              <FormControl id="preferredName">
+              <FormControl id="displayName" isRequired>
                 <FormLabel>Preferred / Display Name</FormLabel>
-                <Input placeholder="Preferred / Display Name" defaultValue={initialData?.preferredName} />
+                <Input name="displayName" placeholder="Preferred / Display Name" value={formData.displayName} onChange={handleChange} />
               </FormControl>
             </GridItem>
             <GridItem>
-              <FormControl id="gender">
+              <FormControl id="gender" isRequired>
                 <FormLabel>Gender</FormLabel>
-                <Select placeholder="Select Gender" defaultValue={initialData?.gender}>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
+                <Select name="gender" placeholder="Select Gender" value={formData.gender} onChange={handleChange}>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
                 </Select>
               </FormControl>
             </GridItem>
             <GridItem>
-              <FormControl id="dob">
+              <FormControl id="dateOfBirth" isRequired>
                 <FormLabel>Date of Birth</FormLabel>
-                <Input type="date" defaultValue={initialData?.dob} />
+                <Input name="dateOfBirth" type="date" value={formData.dateOfBirth} onChange={handleChange} />
               </FormControl>
             </GridItem>
             <GridItem>
-              <FormControl id="email">
+              <FormControl id="email" isRequired>
                 <FormLabel>Email</FormLabel>
-                <Input placeholder="Email" defaultValue={initialData?.email} />
+                <Input name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
               </FormControl>
             </GridItem>
             <GridItem>
-              <FormControl id="mobile">
+              <FormControl id="mobileNumber" isRequired>
                 <FormLabel>Mobile Number</FormLabel>
-                <Input placeholder="Mobile Number" defaultValue={initialData?.mobile} />
+                <Input name="mobileNumber" placeholder="Mobile Number" value={formData.mobileNumber} onChange={handleChange} />
               </FormControl>
             </GridItem>
             <GridItem>
-              <FormControl id="designation">
+              <FormControl id="designation" isRequired>
                 <FormLabel>Designation</FormLabel>
-                <Input placeholder="Designation" defaultValue={initialData?.designation} />
+                <Input name="designation" placeholder="Designation" value={formData.designation} onChange={handleChange} />
               </FormControl>
             </GridItem>
             <GridItem>
-              <FormControl id="employeeType">
+              <FormControl id="employeeType" isRequired>
                 <FormLabel>Employee Type</FormLabel>
-                <Select placeholder="Select Employee Type" defaultValue={initialData?.employeeType}>
-                  <option value="full-time">Full Time</option>
-                  <option value="part-time">Part Time</option>
-                  <option value="contract">Contract Basis</option>
-                  <option value="other">Other</option>
+                <Select name="employeeType" placeholder="Select Employee Type" value={formData.employeeType} onChange={handleChange}>
+                  <option value="Full time">Full Time</option>
+                  <option value="Part time">Part Time</option>
+                  <option value="Contract">Contract Basis</option>
                 </Select>
               </FormControl>
             </GridItem>
             <GridItem>
-              <FormControl id="joinedDate">
+              <FormControl id="joinedDate" isRequired>
                 <FormLabel>Joined Date</FormLabel>
-                <Input type="date" defaultValue={initialData?.joinedDate} />
+                <Input name="joinedDate" type="date" value={formData.joinedDate} onChange={handleChange} />
               </FormControl>
             </GridItem>
             <GridItem>
-              <FormControl id="experience">
+              <FormControl id="experience" isRequired>
                 <FormLabel>Experience</FormLabel>
-                <Select placeholder="Select Experience" defaultValue={initialData?.experience}>
-                  <option value="1">01 Year</option>
-                  <option value="2">02 Years</option>
-                  <option value="3">03 Years</option>
-                  <option value="4">04 Years</option>
-                  <option value="5">05 Years</option>
-                  <option value="6">06 Years</option>
-                  <option value="7">07 Years</option>
-                  <option value="8">08 Years</option>
-                  <option value="9">09 Years</option>
-                  <option value="10">10 Years</option>
-                </Select>
+                <Input name="experience" type="number" placeholder="Experience" value={formData.experience} onChange={handleChange} />
               </FormControl>
             </GridItem>
             <GridItem colSpan={2}>
-              <FormControl id="salary">
+              <FormControl id="salary" isRequired>
                 <FormLabel>Salary</FormLabel>
-                <Input placeholder="Salary" defaultValue={initialData?.salary} />
+                <Input name="salary" type="number" placeholder="Salary" value={formData.salary} onChange={handleChange} />
               </FormControl>
             </GridItem>
             <GridItem colSpan={2}>
-              <FormControl id="notes">
+              <FormControl id="personalNotes">
                 <FormLabel>Personal Notes</FormLabel>
-                <Textarea placeholder="Personal Notes" defaultValue={initialData?.notes} />
+                <Textarea name="personalNotes" placeholder="Personal Notes" value={formData.personalNotes} onChange={handleChange} />
               </FormControl>
             </GridItem>
           </Grid>
@@ -130,7 +162,7 @@ const AddEditPeopleModal = ({ isOpen, onClose, initialData }: { isOpen: boolean,
           <Button variant="ghost" mr={3} onClick={onClose}>
             Cancel
           </Button>
-          <Button colorScheme="blue">{initialData ? 'Save Changes' : 'Add People'}</Button>
+          <Button colorScheme="blue" onClick={handleSubmit}>{initialData ? 'Save Changes' : 'Add People'}</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

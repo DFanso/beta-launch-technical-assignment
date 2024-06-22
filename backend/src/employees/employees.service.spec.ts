@@ -8,13 +8,13 @@ import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { EmployeeType } from '../Types/employee.types';
 
 const mockEmployee = (
-  name = 'John Doe',
+  fullName = 'John Doe',
   designation = 'Senior Developer',
   employeeType = EmployeeType.CONTRACT,
   experience = 2,
   employeeId = 1,
 ): Partial<Employee> => ({
-  name,
+  fullName,
   designation,
   employeeType,
   experience,
@@ -56,11 +56,20 @@ describe('EmployeesService', () => {
   describe('create', () => {
     it('should create a new employee', async () => {
       const createEmployeeDto: CreateEmployeeDto = {
-        name: 'John Doe',
+        fullName: 'John Doe',
         designation: 'Senior Developer',
         employeeType: EmployeeType.CONTRACT,
         experience: 2,
         employeeId: 1,
+        initials: '',
+        displayName: '',
+        gender: '',
+        dateOfBirth: undefined,
+        email: '',
+        mobileNumber: '',
+        joinedDate: undefined,
+        salary: 0,
+        personalNotes: '',
       };
       const createdEmployee = {
         ...createEmployeeDto,

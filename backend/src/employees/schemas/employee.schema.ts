@@ -10,7 +10,25 @@ const AutoIncrement = AutoIncrementFactory(mongoose);
 @Schema()
 export class Employee {
   @Prop({ required: true })
-  name: string;
+  fullName: string;
+
+  @Prop({ required: true })
+  initials: string;
+
+  @Prop({ required: true })
+  displayName: string;
+
+  @Prop({ required: true })
+  gender: string;
+
+  @Prop({ required: true })
+  dateOfBirth: Date;
+
+  @Prop({ required: true })
+  email: string;
+
+  @Prop({ required: true })
+  mobileNumber: string;
 
   @Prop({ unique: true })
   employeeId: number;
@@ -23,6 +41,15 @@ export class Employee {
 
   @Prop({ required: true })
   experience: number;
+
+  @Prop({ required: true })
+  joinedDate: Date;
+
+  @Prop({ required: true })
+  salary: number;
+
+  @Prop()
+  personalNotes: string;
 }
 
 const EmployeeSchema = SchemaFactory.createForClass(Employee);
