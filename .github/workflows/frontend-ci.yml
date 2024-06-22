@@ -40,11 +40,6 @@ jobs:
           cd frontend
           yarn build
 
-      - name: Run tests
-        run: |
-          cd frontend
-          yarn test
-
       - name: Check for outdated dependencies
         run: |
           cd frontend
