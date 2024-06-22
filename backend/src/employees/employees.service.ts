@@ -22,18 +22,23 @@ export class EmployeesService {
     limit = 5,
     sortBy?: string,
     sortOrder: 'asc' | 'desc' = 'asc',
-  ): Promise<Employee[]> {
+  ): Promise<{ employees: Employee[]; totalPages: number }> {
     const filter = type ? { employeeType: type } : {};
     const sort: { [key: string]: 'asc' | 'desc' } = sortBy
       ? { [sortBy]: sortOrder }
       : {};
 
-    return this.employeeModel
+    const totalCount = await this.employeeModel.countDocuments(filter);
+    const totalPages = Math.ceil(totalCount / limit);
+
+    const employees = await this.employeeModel
       .find(filter)
       .sort(sort)
       .skip((page - 1) * limit)
       .limit(limit)
       .exec();
+
+    return { employees, totalPages };
   }
 
   async findOne(filter: any): Promise<Employee> {
