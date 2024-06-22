@@ -1,4 +1,3 @@
-import React from 'react';
 import PeopleTable from './components/PeopleTable';
 
 function App() {
