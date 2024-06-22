@@ -11,7 +11,7 @@ export const getEmployees = async (
   sortOrder: 'asc' | 'desc' = 'asc'
 ) => {
   try {
-    const response = await axios.get(API_URL, {
+    const response = await axios.get(`${API_URL}/v1/employees`, {
       params: { type, page, limit, sortBy, sortOrder }
     });
     if (response.status === 200) {
