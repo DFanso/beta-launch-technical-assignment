@@ -13,4 +13,6 @@ export interface Employee {
     joinedDate: string; 
     salary: number;
     personalNotes?: string;
+    _id?: any;
+    __v?:any;
   }
