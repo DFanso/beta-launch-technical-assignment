@@ -27,7 +27,7 @@ export class Employee {
   @Prop({ required: true, unique: true, match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ })
   email: string;
 
-  @Prop({ required: true, match: /^\d{10}$/ })
+  @Prop({ required: true, unique: true, match: /^\d{10}$/ })
   mobileNumber: string;
 
   @Prop({ unique: true })

@@ -8,6 +8,7 @@ import {
   MaxLength,
   IsDateString,
   IsEmail,
+  Matches,
 } from 'class-validator';
 import { EmployeeType } from '../../Types/employee.types';
 
@@ -72,6 +73,9 @@ export class CreateEmployeeDto {
   })
   @IsString()
   @IsNotEmpty()
+  @Matches(/^\d{10}$/, {
+    message: 'Mobile number must be a valid 10 digit number',
+  })
   mobileNumber: string;
 
   @IsNumber()

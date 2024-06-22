@@ -25,13 +25,8 @@ export class EmployeesService {
       .exec();
   }
 
-  async findOne(id: number): Promise<Employee> {
-    const employee = await this.employeeModel
-      .findOne({ employeeId: id })
-      .exec();
-    if (!employee) {
-      throw new NotFoundException(`Employee with id ${id} not found`);
-    }
+  async findOne(filter: any): Promise<Employee> {
+    const employee = await this.employeeModel.findOne(filter).exec();
     return employee;
   }
 

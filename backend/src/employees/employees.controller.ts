@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   Query,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { EmployeesService } from './employees.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
@@ -26,8 +28,49 @@ export class EmployeesController {
     description: 'The employee has been successfully created.',
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  create(@Body() createEmployeeDto: CreateEmployeeDto) {
-    return this.employeesService.create(createEmployeeDto);
+  async create(@Body() createEmployeeDto: CreateEmployeeDto) {
+    try {
+      const { email, mobileNumber } = createEmployeeDto;
+
+      if (!email || !mobileNumber) {
+        throw new HttpException(
+          'Email and mobile number are required',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      let employee;
+      employee = await this.employeesService.findOne({ email: email });
+
+      if (employee) {
+        throw new HttpException(
+          'Email is already in use!',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      employee = await this.employeesService.findOne({
+        mobileNumber: mobileNumber,
+      });
+
+      if (employee) {
+        throw new HttpException(
+          'Mobile Number is already in use!',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      const createdEmployee =
+        await this.employeesService.create(createEmployeeDto);
+      return createdEmployee;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Error creating employee',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Get()
@@ -54,12 +97,20 @@ export class EmployeesController {
     description: 'Number of items per page',
     type: Number,
   })
-  findAll(
+  async findAll(
     @Query('type') type?: string,
     @Query('page') page = 1,
     @Query('limit') limit = 5,
   ) {
-    return this.employeesService.findAll(type, page, limit);
+    try {
+      const employees = await this.employeesService.findAll(type, page, limit);
+      return employees;
+    } catch (error) {
+      throw new HttpException(
+        'Error fetching employees',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Get(':id')
@@ -70,8 +121,25 @@ export class EmployeesController {
     type: Employee,
   })
   @ApiResponse({ status: 404, description: 'Employee not found.' })
-  findOne(@Param('id') id: string) {
-    return this.employeesService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    try {
+      const employee = await this.employeesService.findOne(+id);
+      if (!employee) {
+        throw new HttpException(
+          `Employee with id ${id} not found`,
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      return employee;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Error fetching employee',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Patch(':id')
@@ -81,11 +149,31 @@ export class EmployeesController {
     description: 'The employee has been successfully updated.',
   })
   @ApiResponse({ status: 404, description: 'Employee not found.' })
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateEmployeeDto: UpdateEmployeeDto,
   ) {
-    return this.employeesService.update(+id, updateEmployeeDto);
+    try {
+      const updatedEmployee = await this.employeesService.update(
+        +id,
+        updateEmployeeDto,
+      );
+      if (!updatedEmployee) {
+        throw new HttpException(
+          `Employee with id ${id} not found`,
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      return updatedEmployee;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Error updating employee',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Delete(':id')
@@ -95,7 +183,17 @@ export class EmployeesController {
     description: 'The employee has been successfully deleted.',
   })
   @ApiResponse({ status: 404, description: 'Employee not found.' })
-  remove(@Param('id') id: string) {
-    return this.employeesService.remove(+id);
+  async remove(@Param('id') id: string) {
+    try {
+      await this.employeesService.remove(+id);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Error deleting employee',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

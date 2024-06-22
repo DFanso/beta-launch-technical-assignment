@@ -34,9 +34,13 @@ const PeopleTable = () => {
   const fetchEmployees = async () => {
     try {
       const data = await getEmployees();
+      if ('error' in data) {
+        throw new Error(data.error);
+      }
       setPeople(data);
     } catch (error) {
       console.error('Error fetching employees:', error);
+      toast.error('Error fetching employees');
     }
   };
 
@@ -48,7 +52,10 @@ const PeopleTable = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteEmployee(id);
+      const response = await deleteEmployee(id);
+      // if ('error' in response) {
+      //   throw new Error(response.error);
+      // }
       fetchEmployees();
       toast.success('Employee deleted successfully');
     } catch (error) {
@@ -60,17 +67,23 @@ const PeopleTable = () => {
   const handleSave = async (employeeData: Employee) => {
     try {
       if (selectedPerson) {
-        await updateEmployee(selectedPerson.employeeId as any, employeeData);
+        const response = await updateEmployee(selectedPerson.employeeId as any, employeeData);
+        if ('error' in response) {
+          throw new Error(response.error);
+        }
         toast.success('Employee updated successfully');
       } else {
-        await createEmployee(employeeData);
+        const response = await createEmployee(employeeData);
+        if ('error' in response) {
+          throw new Error(response.error);
+        }
         toast.success('Employee added successfully');
       }
       fetchEmployees();
       onClose();
     } catch (error) {
       console.error('Error saving employee:', error);
-      toast.error('Error saving employee');
+      toast.error(`Error saving employee: ${error}`);
     }
   };
 

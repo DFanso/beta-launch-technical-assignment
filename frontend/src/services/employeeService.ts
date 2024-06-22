@@ -4,28 +4,88 @@ import { Employee } from '../types';
 const API_URL = 'http://localhost:5000/v1/employees';
 
 export const getEmployees = async (type?: string, page: number = 1, limit: number = 5) => {
-  const response = await axios.get(API_URL, {
-    params: { type, page, limit }
-  });
-  return response.data;
+  try {
+    const response = await axios.get(API_URL, {
+      params: { type, page, limit }
+    });
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      return { status: response.status, error: 'Failed to fetch employees' };
+    }
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return { status: error.response?.status || 500, error: error.message };
+    } else {
+      return { status: 500, error: 'An unknown error occurred' };
+    }
+  }
 };
 
 export const getEmployeeById = async (id: string) => {
-  const response = await axios.get(`${API_URL}/${id}`);
-  return response.data;
+  try {
+    const response = await axios.get(`${API_URL}/${id}`);
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      return { status: response.status, error: 'Failed to fetch employee' };
+    }
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return { status: error.response?.status || 500, error: error.message };
+    } else {
+      return { status: 500, error: 'An unknown error occurred' };
+    }
+  }
 };
 
 export const createEmployee = async (employeeData: Employee) => {
-  const response = await axios.post(API_URL, employeeData);
-  return response.data;
+  try {
+    const response = await axios.post(API_URL, employeeData);
+    if (response.status === 201) {
+      return response.data;
+    } else {
+      return { status: response.status, error: 'Failed to create employee' };
+    }
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return { status: error.response?.status || 500, error: error.message };
+    } else {
+      return { status: 500, error: 'An unknown error occurred' };
+    }
+  }
 };
 
 export const updateEmployee = async (employeeId: number, employeeData: Employee) => {
-  const response = await axios.patch(`${API_URL}/${employeeId}`, employeeData);
-  return response.data;
+  try {
+    const response = await axios.patch(`${API_URL}/${employeeId}`, employeeData);
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      return { status: response.status, error: 'Failed to update employee' };
+    }
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return { status: error.response?.status || 500, error: error.message };
+    } else {
+      return { status: 500, error: 'An unknown error occurred' };
+    }
+  }
 };
 
 export const deleteEmployee = async (id: string) => {
-  const response = await axios.delete(`${API_URL}/${id}`);
-  return response.data;
+  try {
+    const response = await axios.delete(`${API_URL}/${id}`);
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      return { status: response.status, error: 'Failed to delete employee' };
+    }
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return { status: error.response?.status || 500, error: error.message };
+    } else {
+      return { status: 500, error: 'An unknown error occurred' };
+    }
+  }
 };
